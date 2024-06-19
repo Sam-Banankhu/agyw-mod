@@ -6,18 +6,7 @@
 			<form action="" id="child-form">
 
 <?php 
-      //$regions_id = $_SESSION['login_regions_id'];
-      //$stations_id = $_SESSION['login_stations_id'];
-      $user_id = 1; //$_SESSION['login_id']; 
-      //$station_code = $_SESSION['login_station_code'];
-
-      // $districts = $conn->query("SELECT * FROM district;");
-      // $districts_2 = $conn->query("SELECT * FROM district;");
-      // $tas = $conn->query("SELECT * FROM traditional_authority;");
-      // $tas_2 = $conn->query("SELECT * FROM traditional_authority;");
-      // $villages = $conn->query("SELECT * FROM village;");
-      // $villages_2 = $conn->query("SELECT * FROM village;");
-
+      $user_id = $_SESSION['login_id'];
 ?>
 
  			  <input type="hidden" name="id" value="<?php echo isset($id) ? $id : '' ?>">
