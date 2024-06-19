@@ -101,7 +101,7 @@
 			}
 		}
 		$.ajax({
-			url:'ajax.php?action=save_user',
+			url:'route.php?action=save_user',
 			data: new FormData($(this)[0]),
 		    cache: false,
 		    contentType: false,
