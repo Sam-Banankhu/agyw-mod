@@ -30,7 +30,7 @@
 						
 						<div class="form-group">
 							<label class="control-label">Email</label>
-							<input type="email" class="form-control form-control-sm" name="email" required value="<?php echo isset($email) ? $email : '' ?>">
+							<input type="email" class="form-control form-control-sm" name="email" id="email" required value="<?php echo isset($email) ? $email : '' ?>">
 							<small id="#msg"></small>
 						</div>
 						<div class="form-group">
@@ -63,7 +63,28 @@
 	}
 </style>
 <script>
-	$('[name="password"],[name="cpass"]').keyup(function(){
+  $(document).ready(function(){
+  var today = new Date();
+  var yyyy = today.getFullYear();
+  var mm = String(today.getMonth() + 1).padStart(2, '0'); // Months are zero-based
+  var dd = String(today.getDate()).padStart(2, '0');
+
+  $("#email").blur(function(){
+    var username = $(this).val();
+    $.ajax({
+      type: "POST",
+      url: 'route.php?action=verify',
+      data: { field: 'username', value: username },
+      success: function(response){
+        if (response == 1){
+          alert_toast("Username/email already exists!","error");
+          $("#email").focus();
+        }
+      }
+    });
+  });
+
+  $('[name="password"],[name="cpass"]').keyup(function(){
 		var pass = $('[name="password"]').val()
 		var cpass = $('[name="cpass"]').val()
 		if(cpass == '' ||pass == ''){
@@ -122,4 +143,6 @@
 			}
 		})
 	})
+})
+	
 </script>

@@ -145,20 +145,9 @@ Class Action {
 			}
 		}
 		if(!empty($password)){
-					$data .= ", password=sha1('$password') ";
-
+			$data .= ", password=sha1('$password') ";
 		}
-		$check = $this->db->query("SELECT * FROM users where email ='$email' ".(!empty($id) ? " and id != {$id} " : ''))->num_rows;
-		if($check > 0){
-			return 2;
-			exit;
-		}
-		if(isset($_FILES['img']) && $_FILES['img']['tmp_name'] != ''){
-			$fname = strtotime(date('y-m-d H:i')).'_'.$_FILES['img']['name'];
-			$move = move_uploaded_file($_FILES['img']['tmp_name'],'assets/uploads/'. $fname);
-			$data .= ", avatar = '$fname' ";
-
-		}
+		
 		if(empty($id)){
 			$save = $this->db->query("INSERT INTO users set $data");
 		}else{
@@ -1658,12 +1647,16 @@ function save_medical_treatment(){
 		// $metadata = array();
 		global $statement;
 		switch($_POST['field']){
-			case "prison_number":
+			case "username":
+				$statement = "SELECT * FROM users where email ='$value';";
+				break;
+			case "arv_number":
 				$statement = "SELECT * FROM prisoners WHERE prisoners_no='".$value."';";
 				break;
 			default:
 				break;
 		}
+		
 		$qry = $this->db->query($statement);
 		if($qry->num_rows > 0){
 			return 1;

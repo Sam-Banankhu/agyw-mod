@@ -28,7 +28,7 @@
 						<th class="text-center"><?php echo $i++ ?></th>
 						<td><?php echo ucwords($row['name']) ?></td>
 						<td><?php echo $row['email'] ?></td>
-						<td><?php echo $type[$row['type']] ?></td>
+						<td><?php echo $row['type'] ?></td>
 						<td class="text-center">
 							<button type="button" class="btn btn-default btn-sm btn-flat border-secondary wave-effect text-info dropdown-toggle" data-toggle="dropdown" aria-expanded="true">
 		                      Action

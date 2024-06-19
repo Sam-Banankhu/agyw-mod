@@ -70,5 +70,11 @@ if($action == 'fetch'){
 		echo $results;
 }
 
+if($action == 'verify'){
+	$results = $crud->verify();
+	if($results)
+		echo $results;
+}
+
 ob_end_flush();
 ?>
