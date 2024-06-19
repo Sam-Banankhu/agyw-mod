@@ -21,10 +21,10 @@
           <hr>
           <form id="searchForm" class="form-inline">
             <div class="form-group mx-sm-3 mb-2">
-                <input type="text" name="firstName" class="form-control" placeholder="First Name">
+                <input type="text" name="firstName" id="firstName" autocomplete="off" class="form-control" placeholder="First Name">
             </div>
             <div class="form-group mx-sm-3 mb-2">
-                <input type="text" name="lastName" class="form-control" placeholder="Last Name">
+                <input type="text" name="lastName" id="lastName" autocomplete="off" class="form-control" placeholder="Last Name">
             </div>
             <div class="form-group mx-sm-3 mb-2">
                 <input type="date" name="dob" class="form-control" placeholder="Date of Birth">

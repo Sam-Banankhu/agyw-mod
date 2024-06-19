@@ -18,19 +18,19 @@
           <div class="col-md-4">
             <div class="form-group">
               <label for="given_name" class="control-label">First Name <sup style="color: red;">*</sup></label>
-              <input type="text" class="form-control form-control-sm" name="given_name" value="<?php echo isset($given_name) ? $given_name : '' ?>" required>
+              <input type="text" class="form-control form-control-sm" name="given_name" autocomplete="off" value="" required>
             </div>
           </div>
           <div class="col-md-4">
             <div class="form-group">
               <label for="family_name" class="control-label">Last Name <sup style="color: red;">*</sup></label>
-              <input type="text" class="form-control form-control-sm" name="family_name" value="<?php echo isset($family_name) ? $family_name : '' ?>" required>
+              <input type="text" class="form-control form-control-sm" name="family_name" autocomplete="off" value="" required>
             </div>
           </div>
           <div class="col-md-4">
 					  <div class="form-group">
 						  <label for="hcc_number" class="control-label">HCC Number</label>
-          	  <input type="text" class="form-control form-control-sm" name="hcc_number"  id="hcc_number" value="<?php echo isset($hcc_number) ? $hcc_number : '' ?>">
+          	  <input type="text" class="form-control form-control-sm" name="hcc_number"  id="hcc_number" autocomplete="off" value="">
 					  </div>
 				  </div>
 			  </div>
@@ -40,19 +40,19 @@
           <div class="col-md-4">
 					  <div class="form-group">
 						  <label for="arv_number" class="control-label">ARV Number</label>
-          	  <input type="text" class="form-control form-control-sm" name="arv_number"  id="arv_number" value="<?php echo isset($arv_number) ? $arv_number : '' ?>">
+          	  <input type="text" class="form-control form-control-sm" name="arv_number"  id="arv_number" autocomplete="off" value="">
 					  </div>
 				  </div>
           <div class="col-md-4">
             <div class="form-group">
               <label for="" class="control-label">Age</label>
-						  <input type="text" class="form-control form-control-sm" name="age" value="<?php echo isset($age) ? $age : '' ?>">
+						  <input type="text" class="form-control form-control-sm" name="age" id="age" autocomplete="off" value="">
             </div>
           </div>
           <div class="col-md-4">
             <div class="form-group">
               <label for="date_of_birth" class="control-label">Date of Birth <sup style="color: red;">*</sup></label>
-              <input type="date" class="form-control form-control-sm" autocomplete="off" name="date_of_birth" value="<?php echo isset($date_of_birth) ? date("Y-m-d",strtotime($date_of_birth)) : '' ?>" required>
+              <input type="date" class="form-control form-control-sm" autocomplete="off" name="date_of_birth" id="date_of_birth" value="" required>
             </div>
           </div>
         </div>
@@ -62,7 +62,7 @@
         <div class="col-md-4">
             <div class="form-group">
               <label for="gender" class="control-label">Sex <sup style="color: red;">*</sup></label>
-              <select class="form-control form-control-sm select2" name="gender" value="<?php echo isset($gender) ? $gender : '' ?>" required>
+              <select class="form-control form-control-sm select2" name="gender" id="gender" value="<?php echo isset($gender) ? $gender : '' ?>" required>
                 <option selected="true" disabled="disabled">--Select sex--</option>
                 <option <?php echo isset($gender) && $gender == 'Male' ? 'selected' : '' ?>>Male</option>
                 <option <?php echo isset($gender) && $gender == 'Female' ? 'selected' : '' ?>>Female</option>
@@ -72,13 +72,13 @@
           <div class="col-md-4">
             <div class="form-group">
               <label for="parent_partner_name" class="control-label">Parent/guardian name  <sup style="color: red;">*</sup></label>
-              <input type="text" class="form-control form-control-sm" name="parent_partner_name" id="parent_partner_name" required>
+              <input type="text" class="form-control form-control-sm" name="parent_partner_name" id="parent_partner_name" autocomplete="off" required>
             </div>
           </div>
           <div class="col-md-4">
             <div class="form-group">
               <label for="parent_partner_phone_number" class="control-label">Parent/guardian Phone Number  <sup style="color: red;">*</sup></label>
-              <input type="text"  pattern="[0-9]{10}" class="form-control form-control-sm" name="parent_partner_phone_number" id="parent_partner_phone_number" required>
+              <input type="text"  pattern="[0-9]{10}" class="form-control form-control-sm" name="parent_partner_phone_number" id="parent_partner_phone_number" autocomplete="off" required>
             </div>
           </div>
           </div>
@@ -88,7 +88,7 @@
           <div class="col-md-4">
             <div class="form-group">
               <label for="reg_date" class="control-label">Registration Date <sup style="color: red;">*</sup></label>
-              <input type="date" class="form-control form-control-sm" name="reg_date" id="reg_date" value="<?php echo isset($reg_date) ? $reg_date : '' ?>" required>
+              <input type="date" class="form-control form-control-sm" name="reg_date" id="reg_date" value="" required>
             </div>
           </div>
         </div>
