@@ -8,17 +8,6 @@ if(!isset($_SESSION['start'])){
 	//Set the session start time
 	$_SESSION['start'] = time();
 }
-
-//Check the session is expired or not
-// if(isset($_SESSION['start']) && (time() - $_SESSION['start'] >60)){
-// 	//Unset the session variables
-// 	session_unset();
-// 	//Destroy the session
-// 	session_destroy();
-// 	echo '<script type="text/javascript">
-//                 alert("Session is expired!");
-//                 </script>';
-// }
 ?>
 
 <?php
@@ -97,20 +86,35 @@ Class Action {
 		}
 	}
 	
-	function login(){
+	function login() {
 		extract($_POST);
-			$qry = $this->db->query("SELECT u.*, concat(u.firstname,' ',u.lastname) AS user_name FROM users u WHERE u.email = '".$email."' AND u.password = '".sha1($password)."'  ");
-
-		if($qry->num_rows > 0){
+	
+		// Query to fetch user details including user_type_name
+		$qry = $this->db->query("
+			SELECT u.*, 
+				   ut.type_name AS user_type_name, 
+				   CONCAT(u.firstname, ' ', u.lastname) AS user_name
+			FROM users u
+			JOIN user_types ut ON u.user_type_id = ut.user_type_id
+			WHERE u.email = '".$email."' AND u.password = '".sha1($password)."'
+		");
+	
+		if ($qry->num_rows > 0) {
+			// Fetch user data and include user_type_name in the session
 			foreach ($qry->fetch_array() as $key => $value) {
-				if($key != 'password' && !is_numeric($key))
+				// Add user type name and other details to session
+				if ($key != 'password' && !is_numeric($key)) {
 					$_SESSION['login_'.$key] = $value;
+				}
 			}
-				return 1;
-		}else{
-			return 2;
+	
+			// Now user_type_name is also added to the session along with user details
+			return 1;  // Successful login
+		} else {
+			return 2;  // Login failed
 		}
 	}
+	
 
 	function logout(){
 		session_destroy();
@@ -132,33 +136,46 @@ Class Action {
 			return 3;
 		}
 	}
-	function save_user(){
+	function save_user() {
 		extract($_POST);
 		$data = "";
-		foreach($_POST as $k => $v){
-			if(!in_array($k, array('id','cpass','password')) && !is_numeric($k)){
-				if(empty($data)){
-					$data .= " $k='$v' ";
-				}else{
-					$data .= ", $k='$v' ";
+		
+		// Prepare the data for insertion or update
+		foreach ($_POST as $k => $v) {
+			if (!in_array($k, array('id', 'cpass', 'password')) && !is_numeric($k)) {
+				if (empty($data)) {
+					$data .= " `$k`='" . $this->db->real_escape_string($v) . "' ";
+				} else {
+					$data .= ", `$k`='" . $this->db->real_escape_string($v) . "' ";
 				}
 			}
 		}
-		if(!empty($password)){
-			$data .= ", password=sha1('$password') ";
+	
+		// Handle the password if provided
+		if (!empty($password)) {
+			$hashedPassword = sha1($this->db->real_escape_string($password));
+			$data .= ", `password`='$hashedPassword' ";
 		}
-		
-		if(empty($id)){
-			$save = $this->db->query("INSERT INTO users set $data");
-		}else{
-			$save = $this->db->query("UPDATE users set $data where id = $id");
+	
+		// Check if we are inserting a new user or updating an existing one
+		if (empty($id)) {
+			// Insert a new user
+			$query = "INSERT INTO `users` SET $data, `is_active`=1";
+		} else {
+			// Update an existing user
+			$query = "UPDATE `users` SET $data WHERE `id` = " . (int)$id;
 		}
-
-		if($save){
-			return 1;
+	
+		// Execute the query and return the result
+		$save = $this->db->query($query);
+	
+		if ($save) {
+			return 1; // Success
+		} else {
+			return 0; // Failure
 		}
 	}
-	function signup(){
+		function signup(){
 		extract($_POST);
 		$data = "";
 		foreach($_POST as $k => $v){
@@ -537,14 +554,9 @@ Class Action {
 		$selected = "*";
 		switch ($_POST['type']) {
 			case "parent_visit":
-				// $selected = 'visit_id, meeting_date, service, adherence, eligible_for_vl, date_of_vl_test, vl_result, iac_conducted, second_vl_conducted, 
-				// 	second_vl_result, second_vl_decision, malnutrition_status, return_to_school, outcome, outcome_date, comment';
 				$whereClause = "WHERE parent_id = ".$id;
 				break;
 			case "child_visit":
-				//$selected = 'visit_id, meeting_date, child_id, age_at_visit, nevirapine, bactrim, immunization, 
-				//	dbs_hiv_test, rapid_hiv_test, age_at_test, type_of_vaccine, hiv_status, height_cm, weight_kg, muac_cm, 
-				//	feeding_type, malnutrition_status, outcome, outcome_date, comments';
 				$whereClause = "WHERE child_id = ".$id;
 				break;
 			default:
@@ -608,7 +620,6 @@ Class Action {
 			return 1;
 		}
 	}
-
 
 
 	function save_prescription(){

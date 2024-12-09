@@ -1,0 +1,50 @@
+       /* Styling for the "table" */
+       .ctable {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        border: 1px solid #ddd;
+    }
+    .header, .crow {
+        display: flex;
+        width: 100%;
+        border-bottom: 1px solid #ddd;
+    }
+    .cell {
+        padding: 8px;
+        border-right: 1px solid #ddd;
+        flex: 1;
+    }
+    .cell:last-child {
+        border-right: none;
+    }
+    .crow:hover {
+        background-color: #f1f1f1;
+    }
+    .dropdown-content {
+        display: none;
+        flex-direction: column;
+        background-color: #f9f9f9;
+        border: 1px solid #ddd;
+        position: absolute;
+        z-index: 1;
+    }
+    .dropdown-content .cell {
+        border: none;
+    }
+    .crow.expanded .dropdown-content {
+        display: flex;
+    }
+    .dropdown-button {
+        background-color: #4CAF50;
+        color: white;
+        padding: 8px;
+        border: none;
+        cursor: pointer;
+    }
+    .dropdown-button:hover {
+        background-color: #45a049;
+    }
+        .modal-dialog {
+    max-width: 80%; /* Adjust the width as needed */
+}

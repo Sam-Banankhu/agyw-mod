@@ -3,7 +3,7 @@ ob_start();
 date_default_timezone_set("Africa/Blantyre");
 
 $action = $_GET['action'];
-include 'controller.php';
+require 'controller.php';
 $crud = new Action();
 if($action == 'login'){
 	$login = $crud->login();
@@ -20,11 +20,11 @@ if($action == 'logout'){
 	if($logout)
 		echo $logout;
 }
-if($action == 'logout2'){
-	$logout = $crud->logout2();
-	if($logout)
-		echo $logout;
-}
+// if($action == 'logout2'){
+// 	$logout = $crud->logout2();
+// 	if($logout)
+// 		echo $logout;
+// }
 
 if($action == 'signup'){
 	$save = $crud->signup();

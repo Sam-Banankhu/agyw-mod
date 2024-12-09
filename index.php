@@ -1,10 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
-<?php session_start() ?>
-<?php 
-	if(!isset($_SESSION['login_id']))
+<?php session_start(); 
+if(!isset($_SESSION['login_user_id']))
 	    header('location:login.php');
-    include 'db_connect.php';
+    include './db_connect.php';
     ob_start();
   ob_end_flush();
 
