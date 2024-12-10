@@ -49,6 +49,8 @@ CREATE TABLE `parent` (
   `place_of_residence` VARCHAR(100) DEFAULT NULL COMMENT 'Parent place of residence',
   `phone_number` VARCHAR(45) DEFAULT NULL COMMENT 'Parent phone number',
   `marital_status` ENUM('single', 'married', 'divorced', 'widowed') DEFAULT NULL COMMENT 'Marital status',
+  `parent_partner_name` varchar(100) DEFAULT NULL,
+  `parent_partner_phone_number` varchar(45) DEFAULT NULL,
   `is_active` TINYINT(1) DEFAULT 1 COMMENT 'Indicates if parent is active',
   `created_by` INT(11) DEFAULT NULL COMMENT 'User who created this record',
   `date_created` DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT 'Timestamp for when record was created',

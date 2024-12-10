@@ -15,6 +15,7 @@ if ($conn->connect_error) {
 
 // Function to fetch user_type_id based on type_name
 function getUserTypeId($typeName, $conn) {
+    $userTypeId = "";
     $sql = "SELECT user_type_id FROM user_types WHERE type_name = ?";
     $stmt = $conn->prepare($sql);
 

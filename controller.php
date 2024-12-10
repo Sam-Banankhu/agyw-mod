@@ -391,72 +391,66 @@ Class Action {
 		}
 	}
 
-
 	function save() {
-	  extract($_POST);
-	  $data = "";
-	  $inclusion = "";
-	  
-	  foreach ($_POST as $k => $v) {
-		// Skip 'id' field and non-numeric keys
-		if ($v !== '' && $k !== 'inclusion_criteria' && $k !== 'add_inclusion_criteria' && $k !== 'id' && $k !== 'form-name' && !is_numeric($k)) {
-		  if($k == 'service')
-			$v = implode(';', $_POST['service']);
+		extract($_POST);
+		$data = "";
+	
+		// Loop through POST data and prepare SQL data string
+		foreach ($_POST as $k => $v) {
+			// Skip irrelevant keys
+			if ($v !== '' && $k !== 'inclusion_criteria' && $k !== 'add_inclusion_criteria' && $k !== 'id' && $k !== 'form-name' && !is_numeric($k)) {
+				if ($k == 'service') {
+					$v = implode(';', $_POST['service']);
+				}
+				$v = $this->db->real_escape_string($v);
+	
+				if ($k == 'comment') {
+					$v = htmlentities(str_replace("'", "&#x2022;", $v));
+				}
 
-		  // Ensure $v is properly escaped
-		  $v = $this->db->real_escape_string($v);
+				if (empty($data)) {
+					$data .= "$k='$v'";
+				} else {
+					$data .= ", $k='$v'";
+				}
+			}
+		}
+	
+		if (isset($_POST['form-name'])) {
+			$formName = $_POST['form-name'];
+			$id = isset($id) ? $id : null;
 
-		  if($k == 'comment')
-			$v = htmlentities(str_replace("'","&#x2022;",$v));
-				
-		  // Append key-value pair to $data string
-		  if (empty($data)) {
-			$data .= "$k='$v'";
-		  } else {
-			$data .= ", $k='$v'";
-		  }
-		}
-	  }
+			$result = $this->handleFormSubmission($formName, $id, $data, $this->db);
 	
-	  if (isset($_POST['form-name'])) {
-		$formName = $_POST['form-name'];
-		$id = isset($id) ? $id : null; // Assuming $id is defined elsewhere
-	
-		// Call the function to handle form submission
-		$result = $this->handleFormSubmission($formName, $id, $data, $this->db);
-	
-		$resultArray = json_decode($result, true);
-		if($formName === 'parent-form' && $resultArray['success']){
-			$pid = $resultArray['data']['parent_id'];
-			if (!empty($inclusion_criteria)) {
-			  foreach($inclusion_criteria as $criteria){
-			    if (empty($inclusion)) {
-				  $inclusion .= "($pid, 'primary', '$criteria')";
-			    } else {
-				  $inclusion .= ", ($pid, 'primary', '$criteria')";
-			    }
-			  }
+			$resultArray = json_decode($result, true);
+			
+			if ($formName === 'parent-form' && $resultArray['success']) {
+				$pid = $resultArray['data']['parent_id'];
+
+				if (!empty($inclusion_criteria)) {
+					foreach ($inclusion_criteria as $criteria_id) {
+
+						$query = "INSERT INTO parent_inclusion_criteria (parent_id, inclusion_criteria_id) VALUES ('$pid', '$criteria_id')";
+						$this->db->query($query);
+					}
+				}
+
+				if (!empty($add_inclusion_criteria)) {
+					foreach ($add_inclusion_criteria as $additional_criteria_id) {
+						$query = "INSERT INTO parent_additional_inclusion_criteria (parent_id, additional_inclusion_criteria_id) VALUES ('$pid', '$additional_criteria_id')";
+						$this->db->query($query);
+					}
+				}
+				return $result;
 			}
-			if (!empty($add_inclusion_criteria)) {
-			  foreach($add_inclusion_criteria as $criteria_b){
-			    if (empty($inclusion)) {
-				  $inclusion .= "($pid, 'secondary', '$criteria_b')";
-			    } else {
-				  $inclusion .= ", ($pid, 'secondary', '$criteria_b')";
-			    }
-			  }
-			}
-		    $query = "INSERT INTO inclusion_criteria (patient_id, criteria_type, criteria) VALUE $inclusion";
-			$save = $this->db->query($query);
+
+			return json_encode(array('success' => false, 'error' => 'Parent form submission failed.'));
+		} else {
+			return json_encode(array('success' => false, 'error' => 'Form name not provided.'));
 		}
-		// Output the result (JSON response)
-		return $result;
-	  } else {
-		// Handle invalid or missing form-name parameter
-		return json_encode(array('success' => false, 'error' => 'Form name not provided.'));
-	  }
 	}
-
+	
+	
 	function search(){
 		extract($_POST);
 		$results = "";
